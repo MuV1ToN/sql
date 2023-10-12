@@ -1,0 +1,242 @@
+
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
+-- --------------------------------------------------
+-- Date Created: 10/12/2023 16:08:51
+-- Generated from EDMX file: C:\Users\Администратор\source\repos\2P11\2P11\Model1.edmx
+-- --------------------------------------------------
+
+SET QUOTED_IDENTIFIER OFF;
+GO
+USE [22-1П11-412-02];
+GO
+IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
+GO
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- --------------------------------------------------
+
+IF OBJECT_ID(N'[dbo].[FK_Student_Group]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Student] DROP CONSTRAINT [FK_Student_Group];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Student_People]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Student] DROP CONSTRAINT [FK_Student_People];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Teacher_People]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Teacher] DROP CONSTRAINT [FK_Teacher_People];
+GO
+IF OBJECT_ID(N'[Хранилище ModelContainer].[FK_USER_ROLE_ROLE]', 'F') IS NOT NULL
+    ALTER TABLE [Хранилище ModelContainer].[USER_ROLE] DROP CONSTRAINT [FK_USER_ROLE_ROLE];
+GO
+IF OBJECT_ID(N'[Хранилище ModelContainer].[FK_USER_ROLE_User]', 'F') IS NOT NULL
+    ALTER TABLE [Хранилище ModelContainer].[USER_ROLE] DROP CONSTRAINT [FK_USER_ROLE_User];
+GO
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- --------------------------------------------------
+
+IF OBJECT_ID(N'[dbo].[Group]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Group];
+GO
+IF OBJECT_ID(N'[dbo].[People]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[People];
+GO
+IF OBJECT_ID(N'[dbo].[ROLE]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ROLE];
+GO
+IF OBJECT_ID(N'[dbo].[Student]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Student];
+GO
+IF OBJECT_ID(N'[dbo].[Teacher]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Teacher];
+GO
+IF OBJECT_ID(N'[dbo].[User]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[User];
+GO
+IF OBJECT_ID(N'[Хранилище ModelContainer].[USER_ROLE]', 'U') IS NOT NULL
+    DROP TABLE [Хранилище ModelContainer].[USER_ROLE];
+GO
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'User'
+CREATE TABLE [dbo].[User] (
+    [Login] nvarchar(50)  NOT NULL,
+    [Password] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'Group'
+CREATE TABLE [dbo].[Group] (
+    [ID] decimal(18,0) IDENTITY(1,1) NOT NULL,
+    [Years] decimal(4,0)  NOT NULL,
+    [SubGroup] decimal(1,0)  NOT NULL,
+    [Literal] nvarchar(2)  NOT NULL,
+    [CountClass] decimal(2,0)  NULL
+);
+GO
+
+-- Creating table 'People'
+CREATE TABLE [dbo].[People] (
+    [ID] decimal(18,0) IDENTITY(1,1) NOT NULL,
+    [Name] nchar(10)  NOT NULL,
+    [SecondName] nchar(10)  NOT NULL,
+    [MidleName] nchar(10)  NOT NULL
+);
+GO
+
+-- Creating table 'ROLE'
+CREATE TABLE [dbo].[ROLE] (
+    [ID] decimal(18,0) IDENTITY(1,1) NOT NULL,
+    [NAME] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'Student'
+CREATE TABLE [dbo].[Student] (
+    [ID] decimal(18,0) IDENTITY(1,1) NOT NULL,
+    [PeopleID] decimal(18,0)  NOT NULL,
+    [GroupID] decimal(18,0)  NOT NULL
+);
+GO
+
+-- Creating table 'Teacher'
+CREATE TABLE [dbo].[Teacher] (
+    [ID] decimal(18,0)  NOT NULL,
+    [PeopleID] decimal(18,0)  NOT NULL
+);
+GO
+
+-- Creating table 'USER_ROLE'
+CREATE TABLE [dbo].[USER_ROLE] (
+    [ROLE_ID] decimal(18,0)  NOT NULL,
+    [User_Login] nvarchar(50)  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [Login] in table 'User'
+ALTER TABLE [dbo].[User]
+ADD CONSTRAINT [PK_User]
+    PRIMARY KEY CLUSTERED ([Login] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'Group'
+ALTER TABLE [dbo].[Group]
+ADD CONSTRAINT [PK_Group]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'People'
+ALTER TABLE [dbo].[People]
+ADD CONSTRAINT [PK_People]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'ROLE'
+ALTER TABLE [dbo].[ROLE]
+ADD CONSTRAINT [PK_ROLE]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'Student'
+ALTER TABLE [dbo].[Student]
+ADD CONSTRAINT [PK_Student]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'Teacher'
+ALTER TABLE [dbo].[Teacher]
+ADD CONSTRAINT [PK_Teacher]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ROLE_ID], [User_Login] in table 'USER_ROLE'
+ALTER TABLE [dbo].[USER_ROLE]
+ADD CONSTRAINT [PK_USER_ROLE]
+    PRIMARY KEY CLUSTERED ([ROLE_ID], [User_Login] ASC);
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [GroupID] in table 'Student'
+ALTER TABLE [dbo].[Student]
+ADD CONSTRAINT [FK_Student_Group]
+    FOREIGN KEY ([GroupID])
+    REFERENCES [dbo].[Group]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Student_Group'
+CREATE INDEX [IX_FK_Student_Group]
+ON [dbo].[Student]
+    ([GroupID]);
+GO
+
+-- Creating foreign key on [PeopleID] in table 'Student'
+ALTER TABLE [dbo].[Student]
+ADD CONSTRAINT [FK_Student_People]
+    FOREIGN KEY ([PeopleID])
+    REFERENCES [dbo].[People]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Student_People'
+CREATE INDEX [IX_FK_Student_People]
+ON [dbo].[Student]
+    ([PeopleID]);
+GO
+
+-- Creating foreign key on [PeopleID] in table 'Teacher'
+ALTER TABLE [dbo].[Teacher]
+ADD CONSTRAINT [FK_Teacher_People]
+    FOREIGN KEY ([PeopleID])
+    REFERENCES [dbo].[People]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Teacher_People'
+CREATE INDEX [IX_FK_Teacher_People]
+ON [dbo].[Teacher]
+    ([PeopleID]);
+GO
+
+-- Creating foreign key on [ROLE_ID] in table 'USER_ROLE'
+ALTER TABLE [dbo].[USER_ROLE]
+ADD CONSTRAINT [FK_USER_ROLE_ROLE]
+    FOREIGN KEY ([ROLE_ID])
+    REFERENCES [dbo].[ROLE]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [User_Login] in table 'USER_ROLE'
+ALTER TABLE [dbo].[USER_ROLE]
+ADD CONSTRAINT [FK_USER_ROLE_User]
+    FOREIGN KEY ([User_Login])
+    REFERENCES [dbo].[User]
+        ([Login])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_USER_ROLE_User'
+CREATE INDEX [IX_FK_USER_ROLE_User]
+ON [dbo].[USER_ROLE]
+    ([User_Login]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------
